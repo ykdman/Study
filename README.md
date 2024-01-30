@@ -134,3 +134,136 @@ function App() {
 - 주석
 
   - {/\*\*/} 으로 주석을 사용
+
+> ## props
+
+- properties 의 줄임말
+- 컴포넌트에게 값을 전달할 때 사용
+
+  - App.js
+
+  ```jsx
+  import React from 'react';
+  import Hello from './Hello';
+
+  function App() {
+    return <Hello name="react" />;
+  }
+
+  export default App;
+  ```
+
+  - Hello.js
+
+  ```jsx
+  import React from 'react';
+
+  function Hello(props) {
+    return <div>안녕하세요 {props.name}</div>;
+  }
+
+  export default Hello;
+  ```
+
+  - props 는 객체로 전달되는 것을 확인
+
+  ### - 여러개의 props (feat. 비구조화 할당)
+
+  - App.js
+
+  ```jsx
+  import React from 'react';
+  import Hello from './Hello';
+
+  function App() {
+    return <Hello name="Hello World!" color="red" />;
+  }
+
+  export default App;
+  ```
+
+  - Hello.js
+
+  ```jsx
+  // 방법 1
+  import React from 'react';
+
+  function Hello(props) {
+    return <div style={{ color: props.color }}>안녕하세요 {props.name}</div>;
+  }
+
+  export default Hello;
+  ```
+
+  ```jsx
+  // 방법 2
+  import React from 'react';
+
+  function Hello({ color, name }) {
+    return <div style={{ color: color }}>안녕하세요 {name}</div>;
+  }
+
+  export default Hello;
+  ```
+
+  ### - defaultProps 값 설정
+
+  - props 가 빈 값이 전달 되었을때
+    즉, argument 가 빈 값이 전달되었을때, default 값을 사용
+
+  - Hello.js
+
+  ```jsx
+  import React from 'react';
+
+  function Hello({ color, name }) {
+    return <div style={{ color: color }}>안뇽 {name}</div>;
+  }
+
+  // defaultProps 설정
+  Hello.defaultProps = {
+    name: '이름없음',
+  };
+
+  export default Hello;
+  ```
+
+  ### - props.children
+
+  - import 한 태그 의 자식 태그들을 전달할때 사용
+
+  - Wrapper.js
+
+  ```jsx
+  import React from 'react';
+
+  function Wrapper(props) {
+    const style = {
+      border: '2px solid black',
+      padding: '16px',
+    };
+    return <div style={style}>{props.children}</div>;
+  }
+
+  export default Wrapper;
+  ```
+
+  - App.js
+
+  ```jsx
+  import React from 'react';
+  import Hello from './Hello';
+  import Wrapper from './Wrapper';
+
+  function App() {
+    return (
+      <Wrapper>
+        {/* 전달될 children 은 밑의 Hello 태그 두 개*/}
+        <Hello name="react" color="red" />
+        <Hello color="pink" />
+      </Wrapper>
+    );
+  }
+
+  export default App;
+  ```
