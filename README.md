@@ -267,3 +267,56 @@ function App() {
 
   export default App;
   ```
+
+  > ## 조건부 렌더링
+
+  - 태그 안에 'isSpecial' 속성을 사용
+
+  - App.js
+
+  ```jsx
+  import React from 'react';
+  import Hello from './Hello'; // 개발한 컴포넌트 단위 파일 불러오는법
+  import './App.css'; // css 파일 연결 방법
+  import Wrapper from './Wrapper';
+
+  function App() {
+    return (
+      <>
+        <Wrapper>
+          <Hello name={'react'} color={'red'} isSpecial={true} />
+          <Hello color={'pink'} />
+        </Wrapper>
+      </>
+    );
+  }
+
+  export default App;
+  ```
+
+  - isSpecial의 값은 {} 안에 들어가 있기 때문에 JS 문법으로 true/false를 할당한다.
+  - isSpecial 의 값을 설정하지 않고 <Hello isSpecial/> 로 사용하면, true를 전달한다.
+
+  - Wrapper.js
+
+  ```jsx
+  import React from 'react';
+
+  function Hello({ color, name, isSpecial }) {
+    return (
+      <div style={{ color }}>
+        {isSpecial ? <b>*</b> : null}
+        {/** 또는 {isSpecial && <b>*</b>} 를 사용하기도 한다. */}
+        안녕하세요 {name}
+      </div>
+    );
+  }
+
+  Hello.defaultProps = {
+    name: '이름없음',
+  };
+
+  export default Hello;
+  ```
+
+  - JSX 는 null, false, undefined 를 렌더링 하지 않는다.

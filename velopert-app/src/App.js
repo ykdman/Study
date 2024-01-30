@@ -5,11 +5,12 @@ import Wrapper from './Wrapper';
 
 function App() {
   return (
-    <div>
+    <>
       <Wrapper>
-        <Hello color="black" name="Test Text" />
+        <Hello name={'react'} color={'red'} isSpecial={true} />
+        <Hello color={'pink'} />
       </Wrapper>
-    </div>
+    </>
   );
 }
 
