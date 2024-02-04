@@ -320,3 +320,43 @@ function App() {
   ```
 
   - JSX 는 null, false, undefined 를 렌더링 하지 않는다.
+
+> ## useState 를 이용한 Input 상태 관리하기
+
+- InputSample.js
+
+```js
+import React, { useState, useRef } from 'react';
+
+function InputSample() {
+  const [text, setText] = useState('');
+  const myRef = useRef(null);
+
+  const textUpdate = (e) => {
+    setText(e.target.value);
+  };
+
+  const resetText = (e) => {
+    setText('');
+  };
+  return (
+    <div>
+      <input onChange={textUpdate} ref={myRef} />
+      <button onClick={resetText}>초기화</button>
+      <div>
+        <b>값 : {text}</b>
+      </div>
+    </div>
+  );
+}
+
+export default InputSample;
+```
+
+- useState 는 세팅할 변수 와 그 변수의 Setter 개념의 함수를 반환한다.
+
+- 코드의 useState를 비구조화 할당하는 부분을 살펴 보자
+  ```js
+  const [text, setText] = useState('');
+  ```
+- 이처럼 useState를 통해 세팅할 '**상태**', 그것을 Setter 할수 있는 함수를 반환한다.
