@@ -360,3 +360,120 @@ export default InputSample;
   const [text, setText] = useState('');
   ```
 - 이처럼 useState를 통해 세팅할 '**상태**', 그것을 Setter 할수 있는 함수를 반환한다.
+
+
+> ## useRef 사용
+
+- useRef 를 사용하여 JS 에서 DOM 을 컨트롤 하듯이 jsx내의 DOM을 컨트롤 할 수 있다.
+
+```js
+import React, { useState, useRef } from 'react';
+// useRef 사용 설정
+
+function InputSample() {
+  const [inputs, setInputs] = useState({
+    name: '',
+    nickname: '',
+  });
+  const nameInput = useRef(); //useRef 초기화
+
+  const { name, nickname } = inputs;
+  const onChange = (e) => {
+    const { value, name } = e.target; // e.target 에서 name 과 value 값 할당
+    setInputs({
+      ...inputs, // 기존의 inputs 객체 복사
+      [name]: value, // name propery의 값을 value롤 할당
+      // name이라는 것이 propert key로서 동적 할당 된다.
+    });
+  };
+
+  const onReset = () => {
+    setInputs({
+      name: '',
+      nickname: '',
+    });
+    nameInput.current.focus(); // nameInput (ref) 를 focus
+  };
+
+  return (
+    <div>
+      <input 
+      placeholder="이름" 
+      name="name"
+      onChange={onChange}
+      value={name}
+      ref={nameInput} // nameInput ref 사용
+      />
+      <input
+        placeholder="닉네임"
+        name="nickname"
+        onChange={onChange}
+        value={nickname}
+        
+      />
+      <button onClick={onReset}>초기화</button>
+      <div>
+        <b>값 : </b>
+        {name} ({nickname})
+      </div>
+    </div>
+  );
+}
+
+export default InputSample;
+```
+
+> ## 배열 렌더링
+- 객체 배열 과 같은 모체를 통해 새로운 값을 반환하는 함수를 사용해야 한다.
+- map 과 같은 고차함수
+- React의 개발 정신은, 원본 (props) 를 회손하지 않고 새로운 객체를 반환하는데 있다.
+
+- map 과 같은 함수를 사용할때에는 무조건! jsx 객체를 반환해야 한다.
+
+- UserList.js
+```js
+import React from "react";
+
+function UserRender ({user}) {
+	return (
+		<div>
+			<b>{user.username}</b> <span>({user.email})</span>
+		</div>
+	)
+}
+
+function UserList() { 
+    const users = [
+		{
+			id : 1,
+			username : 'velopert',
+			email : 'public.veloper@gmail.com'
+		},
+		{
+			id : 2,
+			username : 'tester',
+			email : 'tester@example.com'
+		},
+		{
+			id : 3,
+			username : 'liz',
+			email : 'liz@example.com'
+		},		
+	];
+	return (
+		<div>
+			{users.map(user => (
+				<UserRender user={user} key={user.id}/>
+			))}
+		</div>
+
+	)
+}
+
+export default UserList;
+
+/** 원래 map 은 () => {} 로 callback 함수를반환하지만 React 에서는
+ * jsx 객체를 반환하기 위해 () => () 포맷을 사용하여 반환한다.
+*/
+```
+
