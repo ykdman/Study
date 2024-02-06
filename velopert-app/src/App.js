@@ -1,4 +1,10 @@
-import React, { useRef, useState, useMemo, useCallback } from "react";
+import React, {
+  useRef,
+  useState,
+  useMemo,
+  useCallback,
+  useReducer,
+} from "react";
 
 import UserList from "./UserList";
 import CreateUser from "./CreateUser";
@@ -8,30 +14,17 @@ function countActiveUsers(users) {
   return users.filter((user) => user.active).length;
 }
 
-function App() {
-  const [inputs, setInputs] = useState({
+const initialState = {
+  inputs: {
     username: "",
     email: "",
-  });
-  const { username, email } = inputs;
-  // inputs (useState) 초기화
-  // App 전역 변수
-
-  // func : OnChange : input의 change 에 실행
-  const onChange = useCallback((e) => {
-    const { name, value } = e.target;
-    setInputs((inputs) => ({
-      ...inputs,
-      [name]: value,
-    }));
-  }, []);
-
-  const [users, setUsers] = useState([
+  },
+  users: [
     {
       id: 1,
       username: "velopert",
-      email: "public.veloper@gmail.com",
-      active: false,
+      email: "public.velopert@gmail.com",
+      active: true,
     },
     {
       id: 2,
@@ -45,51 +38,94 @@ function App() {
       email: "liz@example.com",
       active: false,
     },
-  ]);
+  ],
+};
 
-  const nextId = useRef(4); // 초기화 4가 current 값이 된다.
+function reducer(state, action) {
+  switch (action.type) {
+    case "CHANGE_INPUT":
+      return {
+        ...state,
+        inputs: {
+          ...state.inputs,
+          [action.name]: action.value,
+        },
+      };
+    case "RESET_INPUT":
+      return {
+        ...state,
+        ...initialState.inputs,
+      };
+    case "CREATE_USER":
+      return {
+        inputs: initialState.inputs,
+        users: state.users.concat(action.user),
+      };
+    case "TOGGLE_USER":
+      return {
+        ...state,
+        users: state.users.map((user) =>
+          user.id === action.id ? { ...user, active: !user.active } : user
+        ),
+      };
+    case "REMOVE_USER":
+      return {
+        ...state,
+        users: state.users.filter((user) => user.id !== action.id),
+      };
+
+    default:
+      return state;
+  }
+}
+
+function App() {
+  //inputs 와 users가 들어있는 reducer 구현
+  const [state, dispatch] = useReducer(reducer, initialState);
+  const nextId = useRef(initialState.users.length + 1);
+  const { users } = state;
+  const { username, email } = state.inputs;
+
+  const onChange = useCallback((e) => {
+    const { name, value } = e.target;
+    dispatch({
+      type: "CHANGE_INPUT",
+      name,
+      value,
+    });
+  }, []);
+
+  const onReset = useCallback((e) => {
+    dispatch({
+      type: "RESET_INPUT",
+    });
+  }, []);
 
   const onCreate = useCallback(() => {
-    if (!username || !email) {
-      return;
-    }
-    const user = {
-      id: nextId.current,
-      username,
-      email,
-    }; // user에 추가할 새 객체
-    setUsers([...users, user]); // spread 연산자를 통한 불변성 유지
-    // 배열에 항목 추가 로직
-    setInputs({
-      username: "",
-      email: "",
+    dispatch({
+      type: "CREATE_USER",
+      user: {
+        id: nextId.current,
+        username,
+        email,
+      },
     });
     nextId.current += 1;
-  }, [users, username, email]);
-  const onRemove = useCallback(
-    (id) => {
-      setUsers(users.filter((user) => user.id !== id));
-    },
-    [users]
-  );
+  }, [username, email]);
 
-  const onToggle = useCallback(
-    (id) => {
-      setUsers(
-        users.map((user) =>
-          user.id === id ? { ...user, active: !user.active } : user
-        )
-      );
-    },
-    [users]
-  );
-
-  const onReset = () => {
-    setInputs({
-      username: "",
-      email: "",
+  const onToggle = useCallback((id) => {
+    dispatch({
+      type: "TOGGLE_USER",
+      id,
     });
-  };
+  }, []);
+
+  const onRemove = useCallback((id) => {
+    dispatch({
+      type: "REMOVE_USER",
+      id,
+    });
+  }, []);
 
   const activeUserCount = useMemo(() => countActiveUsers(users), [users]);
   return (
@@ -98,13 +134,12 @@ function App() {
         username={username}
         email={email}
         onChange={onChange}
-        onCreate={onCreate}
         onReset={onReset}
+        onCreate={onCreate}
       />
-      <UserList users={users} onRemove={onRemove} onToggle={onToggle} />
+      <UserList users={users} onToggle={onToggle} onRemove={onRemove} />
       <div>활성 사용자 수 : {activeUserCount}</div>
     </>
   );
 }
-
 export default App;
