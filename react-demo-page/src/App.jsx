@@ -1,38 +1,19 @@
-import reactImg from './assets/react-core-concepts.png';
-import componentImg from './assets/components.png';
-import { CORE_CONCEPTS } from './data';
+import componentImg from "./assets/components.png";
+import { CORE_CONCEPTS, EXAMPLES } from "./data";
+import { useState } from "react";
 
-const reactDescription = ['Crucial', 'Fundmental', 'Core'];
-function getRandomInt(max) {
-  return Math.floor(Math.random() * (max + 1));
-}
-
-function CoreConcept(props) {
-  const { title, description, img } = props;
-
-  return (
-    <li>
-      <img src={img} alt="" />
-      <h3>{title}</h3>
-      <p>{description}</p>
-    </li>
-  );
-}
-
-function Header() {
-  return (
-    <header>
-      <img src={reactImg} alt="Stylized atom" />
-      <h1>React Essentials</h1>
-      <p>
-        {reactDescription[getRandomInt(2)]} React concepts you will need for
-        almost any app you are going to build!
-      </p>
-    </header>
-  );
-}
+import Header from "./components/Header/Header";
+import CoreConcept from "./components/CoreConcept/CoreConcept";
+import TabButton from "./components/TabButton";
 
 function App() {
+  const [tabContent, setTabContent] = useState("");
+
+  function selectHandler(selectedButton) {
+    console.log(selectedButton);
+    setTabContent(selectedButton);
+  }
+
   return (
     <div>
       <Header></Header>
@@ -43,12 +24,56 @@ function App() {
           <ul>
             {CORE_CONCEPTS.map((core) => (
               <CoreConcept
+                key={crypto.randomUUID()}
                 title={core.title}
                 img={core.image}
                 description={core.description}
               />
             ))}
           </ul>
+        </section>
+        <section id="examples">
+          <h2>Examples</h2>
+          <menu>
+            <TabButton
+              isSelected={tabContent === "components"}
+              onSelect={() => {
+                selectHandler("components");
+              }}
+              label="Component"
+            ></TabButton>
+            <TabButton
+              isSelected={tabContent === "jsx"}
+              onSelect={() => {
+                selectHandler("jsx");
+              }}
+              label="JSX"
+            ></TabButton>
+            <TabButton
+              isSelected={tabContent === "props"}
+              onSelect={() => {
+                selectHandler("props");
+              }}
+              label="Props"
+            ></TabButton>
+            <TabButton
+              isSelected={tabContent === "state"}
+              onSelect={() => {
+                selectHandler("state");
+              }}
+              label="State"
+            ></TabButton>
+          </menu>
+
+          {!tabContent ? (
+            <p>Please Select a Topic</p>
+          ) : (
+            <div id="tab-content">
+              <h3>{EXAMPLES[tabContent].title}</h3>
+              <p>{EXAMPLES[tabContent].description}</p>
+              <code>{EXAMPLES[tabContent].code}</code>
+            </div>
+          )}
         </section>
       </main>
     </div>
