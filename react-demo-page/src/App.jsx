@@ -1,13 +1,14 @@
-import componentImg from "./assets/components.png";
-import { CORE_CONCEPTS, EXAMPLES } from "./data";
-import { useState } from "react";
+import componentImg from './assets/components.png';
+import { CORE_CONCEPTS, EXAMPLES } from './data';
+import { useState } from 'react';
 
-import Header from "./components/Header/Header";
-import CoreConcept from "./components/CoreConcept/CoreConcept";
-import TabButton from "./components/TabButton";
+import Header from './components/Header/Header';
+import CoreConcept from './components/CoreConcept/CoreConcept';
+import TabButton from './components/TabButton';
 
 function App() {
-  const [tabContent, setTabContent] = useState("");
+  // set Tab Content
+  const [tabContent, setTabContent] = useState('');
 
   function selectHandler(selectedButton) {
     console.log(selectedButton);
@@ -15,7 +16,7 @@ function App() {
   }
 
   return (
-    <div>
+    <>
       <Header></Header>
 
       <main>
@@ -36,30 +37,30 @@ function App() {
           <h2>Examples</h2>
           <menu>
             <TabButton
-              isSelected={tabContent === "components"}
+              isSelected={tabContent === 'components'}
               onSelect={() => {
-                selectHandler("components");
+                selectHandler('components');
               }}
               label="Component"
             ></TabButton>
             <TabButton
-              isSelected={tabContent === "jsx"}
+              isSelected={tabContent === 'jsx'}
               onSelect={() => {
-                selectHandler("jsx");
+                selectHandler('jsx');
               }}
               label="JSX"
             ></TabButton>
             <TabButton
-              isSelected={tabContent === "props"}
+              isSelected={tabContent === 'props'}
               onSelect={() => {
-                selectHandler("props");
+                selectHandler('props');
               }}
               label="Props"
             ></TabButton>
             <TabButton
-              isSelected={tabContent === "state"}
+              isSelected={tabContent === 'state'}
               onSelect={() => {
-                selectHandler("state");
+                selectHandler('state');
               }}
               label="State"
             ></TabButton>
@@ -76,7 +77,7 @@ function App() {
           )}
         </section>
       </main>
-    </div>
+    </>
   );
 }
 
