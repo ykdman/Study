@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import NewProject from './components/NewProject.jsx';
-import ProjectSidebar from './components/ProjectSidebar.jsx';
-import NoProjectSelected from './components/NoProjectSelected.jsx';
+import NewProject from "./components/NewProject.jsx";
+import ProjectSidebar from "./components/ProjectSidebar.jsx";
+import NoProjectSelected from "./components/NoProjectSelected.jsx";
+import SelectedProject from "./components/SelectedProject.jsx";
 
 export default function App() {
   const [projectState, setProjectState] = useState({
@@ -10,6 +11,7 @@ export default function App() {
     // null = 프로젝트 추가 하려는 상태
     selectedProjectId: undefined,
     projects: [],
+    tasks: [],
   });
 
   function handleStartProject() {
@@ -44,7 +46,6 @@ export default function App() {
     setProjectState((prevState) => {
       const newProject = {
         ...projectData,
-
         id: crypto.randomUUID(),
       };
       return {
@@ -55,9 +56,60 @@ export default function App() {
     });
   }
 
+  function handleDeleteProject() {
+    // handleSelectProject 가 실행 된 후에만 수행 되므로, 현재 ProjectState 의 SelectedProjectId는 내가 선택한 Project ID로 설정된 상태
+    setProjectState((prevState) => {
+      return {
+        ...prevState,
+        selectedProjectId: undefined,
+        projects: prevState.projects.filter(
+          (project) => project.id !== prevState.selectedProjectId
+        ),
+      };
+    });
+  }
+
+  function handleAddTask(taskText) {
+    // selectedProject 상태에서만 실행, SelectedProjectId 설정 된 상태
+    setProjectState((prevState) => {
+      const taskId = crypto.randomUUID();
+      const newTask = {
+        text: taskText,
+        id: taskId,
+        projectId: prevState.selectedProjectId,
+      };
+      return {
+        ...prevState,
+        tasks: [...prevState.tasks, newTask],
+      };
+    });
+  }
+
+  function handleDeleteTask(id) {
+    // selectedProject 상태에서만 실행, SelectedProjectId 설정 된 상태
+    setProjectState((prevState) => {
+      return {
+        ...prevState,
+        tasks: prevState.tasks.filter((task) => task.id !== id),
+      };
+    });
+  }
+
   console.log(projectState);
   // Project 관련 페이지 설정
-  let content;
+  const selectedProject = projectState.projects.find(
+    (project) => project.id === projectState.selectedProjectId
+  );
+
+  let content = (
+    <SelectedProject
+      project={selectedProject}
+      onDelete={handleDeleteProject}
+      onAddTask={handleAddTask}
+      onDeleteTask={handleDeleteTask}
+      tasks={projectState.tasks}
+    />
+  );
   if (projectState.selectedProjectId === null) {
     content = (
       <NewProject
@@ -75,6 +127,7 @@ export default function App() {
         onStartAddProject={handleStartProject}
         projects={projectState.projects}
         onSelect={handleSelectProject}
+        selectedProjectId={projectState.selectedProjectId}
       />
       {content}
     </main>
