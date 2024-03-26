@@ -46,6 +46,8 @@
 > 강의에서는 userAnswer의 위치를 Quiz.jsx에 작성하여 컨트롤 하였다.
 > 나는 강의와는 다르게 해보고 싶은 마음에 App.jsx에 userAnswer State 를 위치시켜 개발을 진행해보았다.
 
+- 강의에서도 결국 마지막에 사용하는 State들을 App.jsx 단위로 올려서 사용했다...
+
 # Issue 3 : QuizTimer Re-Render
 
 > QuizTimer 컴포넌트가, 내부 로직에 따라 타임아웃이 종료된후, userAnswer에 null 값을 추가하여 Re-Rendering이 되어야 하는데, userAnswer에 null은 추가하지만 Re-Render가 되지 않았다.

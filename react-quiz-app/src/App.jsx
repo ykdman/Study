@@ -6,7 +6,7 @@ import Quiz from "./components/Quiz.jsx";
 
 function App() {
   const [userAnswers, setUserAnswers] = useState([]);
-  const selectedAnswerIndex = userAnswers.length;
+  const quizIndex = userAnswers.length;
 
   // Quiz Complete Flag
   const quizIsComplete = QUESTION.length === userAnswers.length;
@@ -22,7 +22,7 @@ function App() {
       <Header />
       <Quiz
         selectAnswer={handleSelectedAnswer}
-        selectedAnswerIndex={selectedAnswerIndex}
+        quizIndex={quizIndex}
         quizIsComplete={quizIsComplete}
       />
     </>
