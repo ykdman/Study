@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 
-export function useFetch(fetchFn) {
+export function useFetch(fetchFn, initialValue) {
   const [isFetching, setIsFetching] = useState();
   const [error, setError] = useState();
-  const [fetchedData, setFetcheData] = useState();
+  const [fetchedData, setFetcheData] = useState(initialValue);
 
   useEffect(() => {
     async function fetchPlaces() {
@@ -24,6 +24,7 @@ export function useFetch(fetchFn) {
   return {
     isFetching,
     fetchedData,
+    setFetcheData,
     error,
   };
 }
