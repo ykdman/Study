@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
 
-import MealItem from './MealItem';
+import MealItem from "./MealItem";
 
 // Meal Containser Component
 export default function Meals() {
@@ -15,15 +15,15 @@ export default function Meals() {
      *  */
     async function fetchMeals() {
       // GET meals Data
-      const mealsResponse = await fetch('http://localhost:3000/meals', {
-        method: 'GET',
+      const mealsResponse = await fetch("http://localhost:3000/meals", {
+        method: "GET",
       });
 
       const mealDatas = await mealsResponse.json();
       setLoadedMeals(mealDatas);
     }
     fetchMeals();
-  }, [loadedMeals]);
+  }, []);
 
   return (
     <ul id="meals">
