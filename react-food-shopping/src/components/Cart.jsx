@@ -16,6 +16,10 @@ export default function Cart() {
   const cartModalOpen = userProgressCtx.progress === "cart";
   console.log(`cart modal open : ${cartModalOpen}`);
 
+  function handleCloseCart() {
+    userProgressCtx.hideCart();
+  }
+
   return (
     <Modal className="cart" open={cartModalOpen}>
       <h2>Your Cart</h2>
@@ -28,8 +32,10 @@ export default function Cart() {
       </ul>
       <p className="cart-total">{currencyFormatter.format(cartTotalPrice)}</p>
       <p className="modal-actions">
-        <Button textOnly>Close</Button>
-        <Button>Go to Checkout</Button>
+        <Button textOnly onClick={handleCloseCart}>
+          Close
+        </Button>
+        <Button onClick={handleCloseCart}>Go to Checkout</Button>
       </p>
     </Modal>
   );
