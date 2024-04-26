@@ -28,7 +28,7 @@ export function UserProgressContextProvider({ children }) {
   }
 
   const userProgressCtx = {
-    prgress: userProgress,
+    progress: userProgress,
     showCart,
     hideCart,
     showCheckout,

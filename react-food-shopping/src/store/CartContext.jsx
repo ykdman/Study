@@ -5,6 +5,7 @@ const CartContext = createContext({
   items: [],
   addItem: (item) => {},
   removeItem: (id) => {},
+  clearCart: () => {},
 });
 
 // CartContext를 컨트롤 하기 위한 Reducer 함수
@@ -62,7 +63,7 @@ function cartReducer(state, action) {
       // 존재하는 item의 quantity가 1일 때,
       updatedItems.splice(existingCartItemIndex, 1); // 해당 아이템 삭제
     } else {
-      const existingItem = state.item[existingCartItemIndex];
+      const existingItem = state.items[existingCartItemIndex];
       // 추가하려는 item을 새로운 객체로 만들어 기존 property들은 놔두고 quantity 만 감소시킨다.
       const updatedItem = {
         ...existingItem,
@@ -72,6 +73,10 @@ function cartReducer(state, action) {
       updatedItems[existingCartItemIndex] = updatedItem;
     }
     return { ...state, items: updatedItems };
+  }
+
+  if (action.type === "CLEAR_CART") {
+    return { ...state, items: [] };
   }
 
   // 어떠한 action에도 해당되지 않으면 기존state 반환
@@ -91,10 +96,15 @@ export function CartContextProvider({ children }) {
     dispatchCartAction({ type: "REMOVE_ITEM", id });
   }
 
+  function clearCart() {
+    dispatchCartAction({ type: "CLEAR_CART" });
+  }
+
   const cartContext = {
     items: cart.items,
     addItem,
     removeItem,
+    clearCart,
   };
 
   return (
