@@ -2,39 +2,10 @@ import { useLoaderData, json } from "react-router-dom";
 import EventsList from "../components/EventsList";
 
 function EventsPage() {
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [fetchedEvents, setFetchedEvents] = useState();
-  // const [error, setError] = useState();
-
-  // useEffect(() => {
-  //   async function fetchEvents() {
-  //     setIsLoading(true);
-  //     const response = await fetch("http://localhost:8080/events");
-
-  //     if (!response.ok) {
-  //       setError("Fetching events failed.");
-  //     } else {
-  //       const resData = await response.json();
-  //       setFetchedEvents(resData.events);
-  //     }
-  //     setIsLoading(false);
-  //   }
-
-  //   fetchEvents();
-  // }, []);
   // loader가 전달해준 값을 사용하기 위한 useLoaderData
   const events = useLoaderData();
 
-  return (
-    <>
-      {/* <div style={{ textAlign: "center" }}>
-        {isLoading && <p>Loading...</p>}
-        {error && <p>{error}</p>}
-      </div>
-      {!isLoading && fetchedEvents && <EventsList events={fetchedEvents} />} */}
-      <EventsList events={events} />
-    </>
-  );
+  return <EventsList events={events} />;
 }
 
 export default EventsPage;
