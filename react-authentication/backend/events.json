@@ -1,12 +1,1 @@
-{
-  "events": [
-    {
-      "title": "A new event",
-      "image": "https://cdn.muenchen-p.de/fl_progressive,q_65/.imaging/stk/responsive/teaser300/dms/va-2016/muenchner-christkindlmarkt/christkindlmarkt-marienplat-logo-hp/document/christkindlmarkt-marienplat-logo-hp.jpg",
-      "date": "2022-10-01",
-      "description": "Some awesome event!",
-      "id": "2a42fcc4-ea21-4bdd-abf6-c40006dc66a9"
-    }
-  ],
-  "users": []
-}
+{"events":[{"title":"테스트 앙 스굉~","image":"https://picsum.photos/id/135/200/300","date":"2024-05-29","description":"이것도 토큰 쓴 테스트 이벤트","id":"cfff2c72-2252-458f-a77f-00fad2c4b513"},{"title":"이벤트 테스트 추가","image":"https://picsum.photos/id/128/100/100","date":"2024-05-29","description":"이벤트 추가 테스트 토큰 사용","id":"f383c579-f16f-43d2-a9f8-64da330408dd"},{"title":"Test Event","image":"https://picsum.photos/id/34/200/300","date":"2024-05-22","description":"asdasd","id":"798aaccb-31f6-4ec0-a8a2-dd9e048eaff1"}],"users":[{"email":"test@test.com","password":"$2a$12$1IvgfVdHyDzjzHT7c45q.uEwMIDc0Wkn.mHlsZA6yqjRpEMfpSfTS","id":"f8a98f5b-4d22-4ba8-89b2-6481602e00f3"},{"email":"test2@test.com","password":"$2a$12$giW5kgtv3cwmH5MPSXdNBea/KMcTUoTCBZKSHhAhY7/lPjltx9B0e","id":"039f9ab0-d52b-4482-91ab-b3e9f4dbd85e"}]}
