@@ -25,11 +25,13 @@ const cartSlice = createSlice({
           totalPrice: newItem.price,
           name: newItem.title,
         });
+        state.totalPrice = state.totalPrice + newItem.price;
       } else {
         // 이미 있는 item을 추가
         // existingItem이 Object 참조값이기 때문에, existing itme의 속성을 수정하면, item의 요소에도 반영된다.
         existingItem.quantity = existingItem.quantity + 1;
         existingItem.totalPrice = existingItem.totalPrice + newItem.price;
+        state.totalPrice = state.totalPrice + newItem.price;
       }
     },
     removeItemFromCart(state, action) {
@@ -39,12 +41,14 @@ const cartSlice = createSlice({
       if (existingItem.quantity === 1) {
         // 줄이는 item 의 수량이 1 이면 삭제
         state.items = state.items.filter((item) => item.id !== id);
+        state.totalPrice = state.totalPrice - existingItem.price;
       } else {
         // 줄이는 item의 수량이 1이상이면 감소
         existingItem.quantity = existingItem.quantity - 1;
         // 1개를 빼는 것이기 때문에 총 가격도 1개분의 감소가 일어나야함
         existingItem.totalPrice = existingItem.totalPrice - existingItem.price;
       }
+      state.totalPrice = state.totalPrice - existingItem.price;
     },
   },
 });

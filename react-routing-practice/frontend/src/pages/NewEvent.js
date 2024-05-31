@@ -1,4 +1,4 @@
-import { json } from "react-router-dom";
+import { json, redirect } from "react-router-dom";
 import EventForm from "../components/EventForm";
 
 function NewEventPage() {
@@ -27,7 +27,6 @@ export async function action({ request }) {
 
   if (!response.ok) {
     throw json({ message: "이벤트 정보를 저장할 수 없음" }, { status: 500 });
-  } else {
-    console.log(response.json());
   }
+  return redirect("/events");
 }

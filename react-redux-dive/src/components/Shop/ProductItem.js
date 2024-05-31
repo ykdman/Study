@@ -11,7 +11,9 @@ const ProductItem = (props) => {
     price,
   };
   const disPatch = useDispatch();
+
   const addtoCartHandler = () => {
+    console.log({ id: item.id, price: item.price, title: item.title });
     disPatch(
       cartActions.addItemToCart({
         id: item.id,
