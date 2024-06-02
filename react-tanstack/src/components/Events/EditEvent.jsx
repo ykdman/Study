@@ -1,15 +1,28 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from "react-router-dom";
 
-import Modal from '../UI/Modal.jsx';
-import EventForm from './EventForm.jsx';
+import Modal from "../UI/Modal.jsx";
+import EventForm from "./EventForm.jsx";
+import { useMutation } from "@tanstack/react-query";
+import { editEvent, queryClient } from "../../util/http.js";
 
 export default function EditEvent() {
+  const params = useParams();
+  const { id } = params;
   const navigate = useNavigate();
+  const mutation = useMutation({
+    mutationFn: editEvent,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["event"] });
+      navigate(`/events/${id}`);
+    },
+  });
 
-  function handleSubmit(formData) {}
+  function handleSubmit(formData) {
+    mutation.mutate({ id, event: formData });
+  }
 
   function handleClose() {
-    navigate('../');
+    navigate("../");
   }
 
   return (
