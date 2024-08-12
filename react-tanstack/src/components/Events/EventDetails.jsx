@@ -1,40 +1,62 @@
-import { Link, Outlet, useLoaderData, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate, useParams } from "react-router-dom";
 
 import Header from "../Header.jsx";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { deleteEvent, fetchEvent, queryClient } from "../../util/http.js";
-import LoadingIndicator from "../UI/LoadingIndicator.jsx";
+
 import ErrorBlock from "../UI/ErrorBlock.jsx";
+import { useState } from "react";
+import Modal from "../UI/Modal.jsx";
 
 export default function EventDetails() {
-  // const params = useParams();
-  // const id = params.id;
+  const [isDeleting, setIsDeleting] = useState(false);
   const navigate = useNavigate();
 
-  const params = useLoaderData();
-  const id = params.id;
+  // url 에서 :id 값을 얻어온다.
+  const params = useParams();
 
   const { data, isPending, isError, error } = useQuery({
-    queryKey: ["event", id],
-    queryFn: ({ signal }) => fetchEvent({ id, signal }),
+    queryKey: ["event", params.id],
+    queryFn: ({ signal }) => fetchEvent({ id: params.id, signal }),
   });
 
-  const { mutate } = useMutation({
-    mutationFn: (event) => deleteEvent(event.id),
+  const {
+    mutate,
+    isPending: isPendingDeletion,
+    isError: isErrorDeleting,
+    error: errorDelete,
+  } = useMutation({
+    mutationFn: deleteEvent,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["events"] });
+      queryClient.invalidateQueries({
+        queryKey: ["events"],
+        refetchType: "none",
+      });
       navigate("/events");
     },
   });
 
-  function handleDeleteEvent(id) {
-    mutate({ id });
+  function handleStartDelete() {
+    setIsDeleting(true);
+  }
+
+  function handleDeleteEvent() {
+    console.log(params.id);
+    mutate({ id: params.id });
+  }
+
+  function handleStopDelete() {
+    setIsDeleting(false);
   }
 
   let content;
 
   if (isPending) {
-    content = <LoadingIndicator />;
+    content = (
+      <div id="event-details-content" className="center">
+        <p>Loading fetch Event</p>
+      </div>
+    );
   }
 
   if (isError) {
@@ -50,13 +72,11 @@ export default function EventDetails() {
 
   if (data) {
     content = (
-      <article id="event-details">
+      <>
         <header>
           <h1>{data.title}</h1>
           <nav>
-            <button to="/events" onClick={() => handleDeleteEvent(data.id)}>
-              Delete
-            </button>
+            <button onClick={handleStartDelete}>Delete</button>
             <Link to="edit">Edit</Link>
           </nav>
         </header>
@@ -72,19 +92,47 @@ export default function EventDetails() {
             <p id="event-details-description">{data.description}</p>
           </div>
         </div>
-      </article>
+      </>
     );
   }
 
   return (
     <>
+      {isDeleting && (
+        <Modal onClose={handleStopDelete}>
+          <h2>Are you Sure?</h2>
+          <p>
+            Do you really want to delete this event? This Action cannot be
+            undone
+          </p>
+          <div className="form-actions">
+            {isPendingDeletion && <p>Deleting, Please Wait...</p>}
+            {!isPendingDeletion && (
+              <>
+                <button onClick={handleStopDelete} className="button-text">
+                  Cancel
+                </button>
+                <button onClick={handleDeleteEvent} className="button">
+                  Delete
+                </button>
+              </>
+            )}
+          </div>
+          {isErrorDeleting && (
+            <ErrorBlock
+              title="Failed To Delete Event"
+              message={errorDelete.info?.message}
+            />
+          )}
+        </Modal>
+      )}
       <Outlet />
       <Header>
         <Link to="/events" className="nav-item">
           View all Events
         </Link>
       </Header>
-      {content}
+      <article id="event-details">{content}</article>
     </>
   );
 }

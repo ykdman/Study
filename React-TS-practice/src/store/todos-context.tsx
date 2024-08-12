@@ -18,11 +18,13 @@ export const TodoContext = React.createContext<TodoContextType>({
 function TodosContextProvider(props: React.PropsWithChildren) {
   const [todos, setTodos] = useState<Todo[]>([]);
 
+  // Todo 추가 함수
   function addTodoItem(todoText: string) {
     setTodos((prevTodos) => {
       return [...prevTodos, new Todo(todoText)];
     });
   }
+  // Todo 삭제 함수
   function removeTodoItem(id: string) {
     setTodos((prevTodos) => {
       return prevTodos.filter((todo) => todo.id !== id);

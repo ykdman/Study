@@ -6,7 +6,6 @@ import {
 
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./util/http.js";
-import { loaderParams } from "./util/loaderParams.js";
 
 import Events from "./components/Events/Events.jsx";
 import EventDetails from "./components/Events/EventDetails.jsx";
@@ -32,7 +31,7 @@ const router = createBrowserRouter([
   {
     path: "/events/:id",
     element: <EventDetails />,
-    loader: loaderParams,
+    // loader: loaderParams,
     children: [
       {
         path: "/events/:id/edit",
