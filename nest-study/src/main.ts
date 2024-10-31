@@ -1,17 +1,26 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-const PORT = 8888;
+import { AppModule } from './app.module';
+const cookieSession = require('cookie-session');
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.use(
+    cookieSession({
+      keys: ['asdfasfd'],
+    }),
+  );
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
-      forbidNonWhitelisted: true,
-      transform: true,
     }),
   );
-  await app.listen(PORT);
+  (app as any).set('etag', false);
+  app.use((req, res, next) => {
+    res.removeHeader('x-powered-by');
+    res.removeHeader('date');
+    next();
+  });
+  await app.listen(3000);
 }
 bootstrap();
