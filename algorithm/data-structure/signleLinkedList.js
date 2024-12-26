@@ -77,6 +77,21 @@ class SinglyLinkedList {
     }
   }
 
+  /**
+   * index 에 해당하는 Node 반환
+   * @param index {number}
+   */
+  get(index) {
+    if (index < 0 || index >= this.length) return null;
+    let counter = 0;
+    let current = this.head;
+    while (index !== counter) {
+      current = current.next;
+      counter++;
+    }
+    return current;
+  }
+
   leftToRight() {
     if (!this.head) return undefined;
     let currentNode = this.head;
@@ -88,11 +103,35 @@ class SinglyLinkedList {
 
     return currentNode;
   }
+  set(index, inputData) {
+    const foundNode = this.get(index);
+    if (foundNode) {
+      foundNode.data = inputData;
+    }
+    return foundNode;
+  }
+
+  insert(index, data) {
+    if (index < 0 || index > this.length) return false;
+    if (index === this.length) return this.push(data) ?? false;
+    if (index === 0) return this.shift(data) ?? false;
+
+    const newNode = new Node(data);
+    const prevNode = this.get(index - 1);
+    const temp = prevNode.next;
+    newNode.next = temp;
+    prevNode.next = newNode;
+
+    this.length++;
+    return true;
+  }
 }
 
 let list = new SinglyLinkedList();
 list.push("Hello");
 list.push("GoodBye");
 list.push("Ivan");
+list.push("4");
+list.push("<3>");
 
 console.log("test");
