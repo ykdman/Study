@@ -30,9 +30,13 @@ class StarMaker {
    * @param {number} [length=10] - 구분선에 사용할 문자의 길이
    */
   printDivideLine(length = 10) {
-    console.log(this.generateCharacters(length, "="));
+    process.stdout.write(this.generateCharacters(length, "="));
+    this.printLineBreak();
   }
 
+  printLineBreak() {
+    process.stdout.write("\n");
+  }
   /**
    * Q1. 정사각형 패턴을 출력한다.
    * 예) n = 5일 때
@@ -45,7 +49,8 @@ class StarMaker {
   printSquare() {
     const line = this.generateCharacters(this.loop, this.star);
     for (let i = 0; i < this.loop; i++) {
-      console.log(line);
+      process.stdout.write(line);
+      this.printLineBreak();
     }
     this.printDivideLine();
   }
@@ -61,7 +66,8 @@ class StarMaker {
    */
   printLeftAlignedTriangle() {
     for (let i = 1; i <= this.loop; i++) {
-      console.log(this.generateCharacters(i, this.star));
+      process.stdout.write(this.generateCharacters(i, this.star));
+      this.printLineBreak();
     }
     this.printDivideLine();
   }
@@ -82,11 +88,13 @@ class StarMaker {
   printSymmetricTriangle() {
     // 상단: 1 ~ n까지 증가
     for (let i = 1; i <= this.loop; i++) {
-      console.log(this.generateCharacters(i, this.star));
+      process.stdout.write(this.generateCharacters(i, this.star));
+      this.printLineBreak();
     }
     // 하단: n-1 ~ 1까지 감소
     for (let i = this.loop - 1; i >= 1; i--) {
-      console.log(this.generateCharacters(i, this.star));
+      process.stdout.write(this.generateCharacters(i, this.star));
+      this.printLineBreak();
     }
     this.printDivideLine();
   }
@@ -109,7 +117,8 @@ class StarMaker {
         this.generateCharacters(spacesCount, this.blank) +
         this.generateCharacters(starsCount, this.star) +
         this.generateCharacters(spacesCount, this.blank);
-      console.log(line);
+      process.stdout.write(line);
+      this.printLineBreak();
     }
     this.printDivideLine();
   }
@@ -141,7 +150,8 @@ class StarMaker {
         this.generateCharacters(spacesCount, this.blank) +
         this.generateCharacters(starsCount, this.star) +
         this.generateCharacters(spacesCount, this.blank);
-      console.log(line);
+      process.stdout.write(line);
+      this.printLineBreak();
     }
     this.printDivideLine();
   }
@@ -171,23 +181,25 @@ rl.question("반복수(숫자)를 입력하세요: ", (loopInput) => {
       const starMaker = new StarMaker(loopNumber, starChar, blankChar);
       const startTime = Date.now();
 
-      console.log("\nQ1. 정사각형 패턴:");
+      process.stdout.write("\nQ1. 정사각형 패턴:\n");
       starMaker.printSquare();
 
-      console.log("\nQ2. 좌측 정렬 삼각형:");
+      process.stdout.write("\nQ2. 좌측 정렬 삼각형:\n");
       starMaker.printLeftAlignedTriangle();
 
-      console.log("\nQ3. 상하 대칭 삼각형:");
+      process.stdout.write("\nQ3. 상하 대칭 삼각형:\n");
       starMaker.printSymmetricTriangle();
 
-      console.log("\nQ4. 가운데 정렬 피라미드:");
+      process.stdout.write("\nQ4. 가운데 정렬 피라미드:\n");
       starMaker.printPyramid();
 
-      console.log("\nQ5. 상하 대칭 다이아몬드:");
+      process.stdout.write("\nQ5. 상하 대칭 다이아몬드:\n");
       starMaker.printDiamond();
       const endTime = Date.now();
 
-      console.log(`Done Test During ${endTime - startTime} ms \n END!`);
+      process.stdout.write(
+        `Done Test During ${endTime - startTime} ms \n END!`
+      );
       rl.close();
     });
   });
